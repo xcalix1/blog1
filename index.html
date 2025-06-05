@@ -80,6 +80,118 @@
             margin-bottom: 20px;
         }
 
+        .image-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-upload:hover {
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .image-upload.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-text {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .image-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .preview-item {
+            position: relative;
+            display: inline-block;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .remove-image {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-image:hover {
+            background: #c53030;
+        }
+
+        .post-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .post-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .post-image:hover {
+            transform: scale(1.02);
+        }
+
+        .post-image.small {
+            max-width: 200px;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+        }
+
         label {
             display: block;
             margin-bottom: 5px;
@@ -248,6 +360,14 @@
                     <label for="postContent">Content</label>
                     <textarea id="postContent" placeholder="Share your thoughts..." required></textarea>
                 </div>
+                <div class="form-group">
+                    <label>Add Photos</label>
+                    <div class="image-upload" id="imageUpload">
+                        <div class="upload-text">📸 Click to upload photos or drag & drop</div>
+                        <input type="file" id="imageInput" multiple accept="image/*" style="display: none;">
+                        <div class="image-preview" id="imagePreview"></div>
+                    </div>
+                </div>
                 <button type="submit" class="btn">Publish Post</button>
             </form>
         </div>
@@ -255,6 +375,11 @@
         <div id="postsContainer" class="posts-container">
             <div class="loading">Loading posts...</div>
         </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal">
+        <img class="modal-content" id="modalImage">
     </div>
 
     <!-- Firebase SDKs -->
@@ -284,6 +409,7 @@
         };
 
         let posts = [];
+        let selectedImages = [];
 
         // DOM elements
         const postForm = document.getElementById('postForm');
@@ -292,6 +418,62 @@
         const postsContainer = document.getElementById('postsContainer');
         const postCount = document.getElementById('postCount');
         const messageDiv = document.getElementById('message');
+        const imageUpload = document.getElementById('imageUpload');
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+
+        // Convert image to base64
+        function convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Handle image selection
+        async function handleImageSelect(files) {
+            for (let file of files) {
+                if (file.type.startsWith('image/')) {
+                    try {
+                        const base64 = await convertToBase64(file);
+                        selectedImages.push({
+                            name: file.name,
+                            data: base64
+                        });
+                        updateImagePreview();
+                    } catch (error) {
+                        console.error('Error processing image:', error);
+                        showMessage('Error processing image', 'error');
+                    }
+                }
+            }
+        }
+
+        // Update image preview
+        function updateImagePreview() {
+            imagePreview.innerHTML = selectedImages.map((img, index) => `
+                <div class="preview-item">
+                    <img src="${img.data}" alt="${img.name}" class="preview-image">
+                    <button class="remove-image" onclick="removeImage(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        // Remove image from selection
+        function removeImage(index) {
+            selectedImages.splice(index, 1);
+            updateImagePreview();
+        }
+
+        // Show image in modal
+        function showImageModal(src) {
+            modalImage.src = src;
+            imageModal.style.display = 'block';
+        }
 
         // Show message to user
         function showMessage(text, type = 'success') {
@@ -367,6 +549,7 @@
             const post = {
                 title: title,
                 content: content,
+                images: selectedImages,
                 date: new Date().toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
@@ -390,6 +573,8 @@
                 // Clear form and reload posts
                 postTitle.value = '';
                 postContent.value = '';
+                selectedImages = [];
+                updateImagePreview();
                 loadPosts();
                 
             } catch (error) {
@@ -429,6 +614,16 @@
                         </div>
                     </div>
                     <div class="post-content">${escapeHtml(post.content)}</div>
+                    ${post.images && post.images.length > 0 ? `
+                        <div class="post-images">
+                            ${post.images.map(img => `
+                                <img src="${img.data}" 
+                                     alt="${img.name}" 
+                                     class="post-image small" 
+                                     onclick="showImageModal('${img.data}')">
+                            `).join('')}
+                        </div>
+                    ` : ''}
                 </article>
             `).join('');
         }
@@ -447,11 +642,41 @@
 
         // Make functions global for onclick handlers
         window.deletePost = deletePost;
+        window.removeImage = removeImage;
+        window.showImageModal = showImageModal;
 
         // Event listeners
         postForm.addEventListener('submit', (e) => {
             e.preventDefault();
             addPost();
+        });
+
+        // Image upload event listeners
+        imageUpload.addEventListener('click', () => imageInput.click());
+        
+        imageInput.addEventListener('change', (e) => {
+            handleImageSelect(e.target.files);
+        });
+
+        // Drag and drop functionality
+        imageUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imageUpload.classList.add('dragover');
+        });
+
+        imageUpload.addEventListener('dragleave', () => {
+            imageUpload.classList.remove('dragover');
+        });
+
+        imageUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            imageUpload.classList.remove('dragover');
+            handleImageSelect(e.dataTransfer.files);
+        });
+
+        // Modal close functionality
+        imageModal.addEventListener('click', () => {
+            imageModal.style.display = 'none';
         });
 
         // Initialize app
