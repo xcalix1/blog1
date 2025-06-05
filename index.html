@@ -436,7 +436,10 @@
 
         // Handle image selection
         async function handleImageSelect(files) {
+            console.log('Files selected:', files.length);
             for (let file of files) {
+                console.log('Processing file:', file.name, 'Type:', file.type, 'Size:', file.size);
+                
                 if (file.type.startsWith('image/') || file.name.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i)) {
                     try {
                         // Check file size (limit to 10MB)
@@ -445,7 +448,10 @@
                             continue;
                         }
 
+                        showMessage('Processing image...', 'success');
                         const base64 = await convertToBase64(file);
+                        console.log('Base64 conversion successful');
+                        
                         selectedImages.push({
                             name: file.name,
                             data: base64,
@@ -455,9 +461,10 @@
                         showMessage(`Image "${file.name}" added successfully!`, 'success');
                     } catch (error) {
                         console.error('Error processing image:', error);
-                        showMessage(`Error processing image "${file.name}". Please try again.`, 'error');
+                        showMessage(`Error processing image "${file.name}": ${error.message}`, 'error');
                     }
                 } else {
+                    console.log('File type not supported:', file.type);
                     showMessage(`"${file.name}" is not a supported image format.`, 'error');
                 }
             }
