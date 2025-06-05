@@ -48,6 +48,7 @@
             margin-bottom: 30px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            position: relative;
         }
 
         .stats {
@@ -341,6 +342,11 @@
         <header>
             <h1>My Personal Blog</h1>
             <p><em>Thoughts, ideas, and stories from my journey</em></p>
+            <div style="position: absolute; top: 10px; right: 10px;">
+                <button id="adminBtn" class="btn" style="padding: 8px 16px; font-size: 14px;" onclick="isAdmin ? adminLogout() : showAdminLogin()">
+                    Admin
+                </button>
+            </div>
         </header>
 
         <div class="stats">
@@ -348,7 +354,7 @@
             <p>Posts Published</p>
         </div>
 
-        <div class="write-post">
+        <div class="write-post" style="display: none;">
             <h2>Write a New Post</h2>
             <div id="message"></div>
             <form id="postForm">
@@ -401,12 +407,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // GitHub backup configuration
-        const GITHUB_CONFIG = {
-            owner: 'xcalix1',
-            repo: 'blog1',
-            token: null // We'll add this later for backup functionality
-        };
+        // Simple admin authentication
+        const ADMIN_KEY = 'your-secret-key-here'; // CHANGE THIS TO YOUR SECRET KEY!
+        let isAdmin = false;
 
         let posts = [];
         let selectedImages = [];
@@ -423,6 +426,51 @@
         const imagePreview = document.getElementById('imagePreview');
         const imageModal = document.getElementById('imageModal');
         const modalImage = document.getElementById('modalImage');
+
+        // Check if admin key is stored
+        function checkAdminStatus() {
+            const storedKey = localStorage.getItem('adminKey');
+            isAdmin = storedKey === ADMIN_KEY;
+            updateUIForAdmin();
+        }
+
+        // Update UI based on admin status
+        function updateUIForAdmin() {
+            const writePost = document.querySelector('.write-post');
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            const adminBtn = document.getElementById('adminBtn');
+            
+            if (isAdmin) {
+                writePost.style.display = 'block';
+                deleteButtons.forEach(btn => btn.style.display = 'inline-block');
+                adminBtn.textContent = 'Logout';
+            } else {
+                writePost.style.display = 'none';
+                deleteButtons.forEach(btn => btn.style.display = 'none');
+                adminBtn.textContent = 'Admin';
+            }
+        }
+
+        // Add admin login functionality
+        function showAdminLogin() {
+            const key = prompt('Enter admin key:');
+            if (key === ADMIN_KEY) {
+                localStorage.setItem('adminKey', key);
+                isAdmin = true;
+                updateUIForAdmin();
+                showMessage('Admin access granted!', 'success');
+            } else if (key) {
+                showMessage('Invalid admin key', 'error');
+            }
+        }
+
+        // Add admin logout
+        function adminLogout() {
+            localStorage.removeItem('adminKey');
+            isAdmin = false;
+            updateUIForAdmin();
+            showMessage('Logged out', 'success');
+        }
 
         // Convert image to base64
         function convertToBase64(file) {
@@ -522,39 +570,14 @@
             }
         }
 
-        // Backup post to GitHub (as an issue)
-        async function backupToGitHub(post) {
-            if (!GITHUB_CONFIG.token) {
-                console.log('GitHub backup not configured');
+        // Add new post
+        async function addPost() {
+            if (!isAdmin) {
+                showMessage('Admin access required', 'error');
+                showAdminLogin();
                 return;
             }
 
-            try {
-                const response = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/issues`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${GITHUB_CONFIG.token}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        title: `Blog Post: ${post.title}`,
-                        body: `**Published:** ${post.date}\n\n${post.content}`,
-                        labels: ['blog-post', 'backup']
-                    })
-                });
-
-                if (response.ok) {
-                    console.log('Post backed up to GitHub');
-                } else {
-                    console.warn('GitHub backup failed');
-                }
-            } catch (error) {
-                console.warn('GitHub backup error:', error);
-            }
-        }
-
-        // Add new post
-        async function addPost() {
             const title = postTitle.value.trim();
             const content = postContent.value.trim();
 
@@ -582,9 +605,6 @@
                 showMessage('Publishing post...', 'success');
                 const docRef = await addDoc(collection(db, 'posts'), post);
                 
-                // Backup to GitHub
-                await backupToGitHub(post);
-                
                 showMessage('Post published successfully!', 'success');
                 
                 // Clear form and reload posts
@@ -602,6 +622,11 @@
 
         // Delete post
         async function deletePost(postId) {
+            if (!isAdmin) {
+                showMessage('Admin access required', 'error');
+                return;
+            }
+            
             if (confirm('Are you sure you want to delete this post?')) {
                 try {
                     await deleteDoc(doc(db, 'posts', postId));
@@ -627,7 +652,7 @@
                         <h2 class="post-title">${escapeHtml(post.title)}</h2>
                         <div style="display: flex; align-items: center; gap: 10px;">
                             <span class="post-date">${post.date}</span>
-                            <button class="delete-btn" onclick="deletePost('${post.id}')">Delete</button>
+                            <button class="delete-btn" onclick="deletePost('${post.id}')" style="display: ${isAdmin ? 'inline-block' : 'none'}">Delete</button>
                         </div>
                     </div>
                     <div class="post-content">${escapeHtml(post.content)}</div>
@@ -643,6 +668,9 @@
                     ` : ''}
                 </article>
             `).join('');
+            
+            // Update delete button visibility after rendering
+            updateUIForAdmin();
         }
 
         // Update post count
@@ -661,6 +689,8 @@
         window.deletePost = deletePost;
         window.removeImage = removeImage;
         window.showImageModal = showImageModal;
+        window.showAdminLogin = showAdminLogin;
+        window.adminLogout = adminLogout;
 
         // Event listeners
         postForm.addEventListener('submit', (e) => {
@@ -698,6 +728,7 @@
 
         // Initialize app
         loadPosts();
+        checkAdminStatus();
     </script>
 </body>
 </html>
