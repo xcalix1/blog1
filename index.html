@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Blog</title>
+    <title>Your Podcast Name - Listen, Learn, Connect</title>
     <style>
         * {
             margin: 0;
@@ -12,723 +12,516 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
-            color: #1a1a1a;
-            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
-            background-size: 400% 400%;
-            animation: gradientShift 8s ease infinite;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
 
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
 
+        /* Header */
         header {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            position: relative;
-        }
-
-        .stats {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-
-        .write-post {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-
-        .write-post h2 {
-            color: #2d3748;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .image-upload {
-            border: 2px dashed rgba(255, 255, 255, 0.5);
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
             background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .image-upload:hover {
-            border-color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .image-upload.dragover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .upload-text {
-            color: #4a5568;
-            margin-bottom: 10px;
-        }
-
-        .image-preview {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .preview-item {
-            position: relative;
-            display: inline-block;
-        }
-
-        .preview-image {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .remove-image {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #e53e3e;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .remove-image:hover {
-            background: #c53030;
-        }
-
-        .post-images {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .post-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .post-image:hover {
-            transform: scale(1.02);
-        }
-
-        .post-image.small {
-            max-width: 200px;
-        }
-
-        .image-modal {
-            display: none;
+            backdrop-filter: blur(10px);
             position: fixed;
+            width: 100%;
             top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
             z-index: 1000;
-            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 8px;
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .logo {
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #2d3748;
+            color: white;
+            text-decoration: none;
         }
 
-        input, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            color: #1a1a1a;
-            font-size: 16px;
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
         }
 
-        input::placeholder, textarea::placeholder {
-            color: #4a5568;
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        textarea {
-            min-height: 120px;
-            resize: vertical;
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 24px;
+            padding: 12px 30px;
             border: none;
-            border-radius: 8px;
+            border-radius: 50px;
+            font-size: 1rem;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
-        .posts-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            margin-top: 50px;
+            min-height: 60vh;
         }
 
-        .post {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
+        .section {
+            padding: 80px 0;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        /* Latest Episodes */
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .episode-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            animation: fadeIn 0.5s ease-in;
+            padding: 2rem;
+            transition: transform 0.3s ease;
         }
 
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
+        .episode-card:hover {
+            transform: translateY(-5px);
         }
 
-        .post-title {
+        .episode-number {
             color: #667eea;
-            font-size: 1.5em;
             font-weight: bold;
-            flex: 1;
+            font-size: 0.9rem;
         }
 
-        .post-date {
-            color: #4a5568;
-            font-size: 0.9em;
+        .episode-title {
+            font-size: 1.3rem;
+            margin: 0.5rem 0;
+            color: #333;
         }
 
-        .delete-btn {
-            background: #e53e3e;
+        .episode-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .play-button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 10px 20px;
+            border-radius: 25px;
             cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
-        .delete-btn:hover {
-            background: #c53030;
+        .play-button:hover {
             transform: scale(1.05);
         }
 
-        .post-content {
-            color: #2d3748;
+        /* About Section */
+        .about {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
             line-height: 1.8;
-            white-space: pre-wrap;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .host-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
         }
 
-        .loading {
+        /* Subscribe Section */
+        .subscribe {
+            background: #333;
+            color: white;
+        }
+
+        .platforms {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .platform {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
             text-align: center;
-            color: #2d3748;
-            font-style: italic;
-            padding: 20px;
+            transition: all 0.3s ease;
         }
 
-        .error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #dc2626;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .platform:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
         }
 
-        .success {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.3);
-            color: #16a34a;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        .platform-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
+        /* Footer */
+        footer {
+            background: #222;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: #ffd700;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
+            .hero h1 {
+                font-size: 2.5rem;
             }
-            
-            header, .write-post, .post {
-                padding: 20px;
+
+            .nav-links {
+                display: none;
             }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .episode-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .episode-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .episode-card:nth-child(3) {
+            animation-delay: 0.4s;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>My Personal Blog</h1>
-            <p><em>Thoughts, ideas, and stories from my journey</em></p>
-            <div style="position: absolute; top: 10px; right: 10px;">
-                <button id="adminBtn" class="btn" style="padding: 8px 16px; font-size: 14px;" onclick="isAdmin ? adminLogout() : showAdminLogin()">
-                    Admin
-                </button>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">🎙️ Your Podcast</a>
+            <ul class="nav-links">
+                <li><a href="#episodes">Episodes</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#subscribe">Subscribe</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Your Podcast Name</h1>
+            <p>Engaging conversations that inspire, educate, and entertain. New episodes every week.</p>
+            <div class="cta-buttons">
+                <a href="#episodes" class="btn btn-primary">Listen Now</a>
+                <a href="#subscribe" class="btn btn-secondary">Subscribe</a>
             </div>
-        </header>
-
-        <div class="stats">
-            <h2 id="postCount">0</h2>
-            <p>Posts Published</p>
         </div>
+    </section>
 
-        <div class="write-post" style="display: none;">
-            <h2>Write a New Post</h2>
-            <div id="message"></div>
-            <form id="postForm">
-                <div class="form-group">
-                    <label for="postTitle">Post Title</label>
-                    <input type="text" id="postTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="postContent">Content</label>
-                    <textarea id="postContent" placeholder="Share your thoughts..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Add Photos</label>
-                    <div class="image-upload" id="imageUpload">
-                        <div class="upload-text">📸 Click to upload photos or drag & drop<br><small>Supports: JPG, PNG, GIF, WebP, BMP, SVG (max 10MB)</small></div>
-                        <input type="file" id="imageInput" multiple accept="image/*,.jpg,.jpeg,.png,.gif,.webp,.bmp,.svg" style="display: none;">
-                        <div class="image-preview" id="imagePreview"></div>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Latest Episodes -->
+        <section id="episodes" class="section">
+            <div class="container">
+                <h2>Latest Episodes</h2>
+                <div class="episodes-grid">
+                    <div class="episode-card">
+                        <div class="episode-number">Episode 001</div>
+                        <h3 class="episode-title">Welcome to the Show</h3>
+                        <p class="episode-description">In our inaugural episode, we introduce ourselves and share what you can expect from this podcast journey.</p>
+                        <button class="play-button" onclick="playEpisode(1)">▶ Play Episode</button>
+                    </div>
+                    <div class="episode-card">
+                        <div class="episode-number">Episode 002</div>
+                        <h3 class="episode-title">Finding Your Voice</h3>
+                        <p class="episode-description">A deep dive into discovering your authentic voice and sharing it with the world.</p>
+                        <button class="play-button" onclick="playEpisode(2)">▶ Play Episode</button>
+                    </div>
+                    <div class="episode-card">
+                        <div class="episode-number">Episode 003</div>
+                        <h3 class="episode-title">Building Community</h3>
+                        <p class="episode-description">How to create meaningful connections and foster genuine community in the digital age.</p>
+                        <button class="play-button" onclick="playEpisode(3)">▶ Play Episode</button>
                     </div>
                 </div>
-                <button type="submit" class="btn">Publish Post</button>
-            </form>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section about">
+            <div class="container">
+                <h2>About the Host</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Welcome! I'm your host, and I'm passionate about bringing you thought-provoking conversations with fascinating people from all walks of life.</p>
+                        <p>This podcast is my way of exploring the ideas, stories, and insights that shape our world. Each episode is designed to leave you with something valuable - whether that's a new perspective, practical advice, or simply a moment of inspiration.</p>
+                        <p>Join me every week as we dive deep into topics that matter, with guests who have something meaningful to share.</p>
+                    </div>
+                    <div class="host-image">
+                        🎧
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subscribe Section -->
+        <section id="subscribe" class="section subscribe">
+            <div class="container">
+                <h2>Subscribe & Listen</h2>
+                <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem;">Never miss an episode - subscribe on your favorite platform</p>
+                <div class="platforms">
+                    <div class="platform" onclick="subscribeTo('spotify')">
+                        <div class="platform-icon">🎵</div>
+                        <h3>Spotify</h3>
+                        <p>Stream on Spotify</p>
+                    </div>
+                    <div class="platform" onclick="subscribeTo('apple')">
+                        <div class="platform-icon">🍎</div>
+                        <h3>Apple Podcasts</h3>
+                        <p>Listen on Apple</p>
+                    </div>
+                    <div class="platform" onclick="subscribeTo('google')">
+                        <div class="platform-icon">🎙️</div>
+                        <h3>Google Podcasts</h3>
+                        <p>Find us on Google</p>
+                    </div>
+                    <div class="platform" onclick="subscribeTo('youtube')">
+                        <div class="platform-icon">📺</div>
+                        <h3>YouTube</h3>
+                        <p>Watch on YouTube</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="social-links">
+                <a href="#" onclick="openSocial('twitter')">🐦</a>
+                <a href="#" onclick="openSocial('instagram')">📷</a>
+                <a href="#" onclick="openSocial('linkedin')">💼</a>
+                <a href="#" onclick="openSocial('email')">✉️</a>
+            </div>
+            <p>&copy; 2025 Your Podcast Name. All rights reserved.</p>
+            <p>Contact us: hello@yourpodcast.com</p>
         </div>
+    </footer>
 
-        <div id="postsContainer" class="posts-container">
-            <div class="loading">Loading posts...</div>
-        </div>
-    </div>
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
 
-    <!-- Image Modal -->
-    <div class="image-modal" id="imageModal">
-        <img class="modal-content" id="modalImage">
-    </div>
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.color = '#333';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.1)';
+                header.style.color = 'white';
+            }
+        });
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+        // Episode player functionality
+        function playEpisode(episodeNumber) {
+            alert(`Playing Episode ${episodeNumber}. In a real implementation, this would connect to your audio player or hosting service.`);
+        }
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDCm0iOMvw0S6SbWhnGa1ePd1DHM9zCc5c",
-            authDomain: "my-blog-f119d.firebaseapp.com",
-            projectId: "my-blog-f119d",
-            storageBucket: "my-blog-f119d.firebasestorage.app",
-            messagingSenderId: "588090449395",
-            appId: "1:588090449395:web:f763e33b75b9f617e80686"
+        // Subscribe functionality
+        function subscribeTo(platform) {
+            const platforms = {
+                spotify: 'https://open.spotify.com/show/your-podcast-id',
+                apple: 'https://podcasts.apple.com/us/podcast/your-podcast/id1234567890',
+                google: 'https://podcasts.google.com/feed/your-podcast-feed',
+                youtube: 'https://youtube.com/c/your-channel'
+            };
+            
+            alert(`Redirecting to ${platform}. In a real implementation, this would link to: ${platforms[platform]}`);
+        }
+
+        // Social media links
+        function openSocial(platform) {
+            const links = {
+                twitter: 'https://twitter.com/yourpodcast',
+                instagram: 'https://instagram.com/yourpodcast',
+                linkedin: 'https://linkedin.com/company/yourpodcast',
+                email: 'mailto:hello@yourpodcast.com'
+            };
+            
+            if (platform === 'email') {
+                window.location.href = links[platform];
+            } else {
+                alert(`Opening ${platform}. In a real implementation, this would link to: ${links[platform]}`);
+            }
+        }
+
+        // Add some interactive animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // Simple admin authentication
-        const ADMIN_KEY = '#1Blog59'; // CHANGE THIS TO YOUR SECRET KEY!
-        let isAdmin = false;
-
-        let posts = [];
-        let selectedImages = [];
-
-        // DOM elements
-        const postForm = document.getElementById('postForm');
-        const postTitle = document.getElementById('postTitle');
-        const postContent = document.getElementById('postContent');
-        const postsContainer = document.getElementById('postsContainer');
-        const postCount = document.getElementById('postCount');
-        const messageDiv = document.getElementById('message');
-        const imageUpload = document.getElementById('imageUpload');
-        const imageInput = document.getElementById('imageInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const imageModal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-
-        // Check if admin key is stored
-        function checkAdminStatus() {
-            const storedKey = localStorage.getItem('adminKey');
-            isAdmin = storedKey === ADMIN_KEY;
-            updateUIForAdmin();
-        }
-
-        // Update UI based on admin status
-        function updateUIForAdmin() {
-            const writePost = document.querySelector('.write-post');
-            const deleteButtons = document.querySelectorAll('.delete-btn');
-            const adminBtn = document.getElementById('adminBtn');
-            
-            if (isAdmin) {
-                writePost.style.display = 'block';
-                deleteButtons.forEach(btn => btn.style.display = 'inline-block');
-                adminBtn.textContent = 'Logout';
-            } else {
-                writePost.style.display = 'none';
-                deleteButtons.forEach(btn => btn.style.display = 'none');
-                adminBtn.textContent = 'Admin';
-            }
-        }
-
-        // Add admin login functionality
-        function showAdminLogin() {
-            const key = prompt('Enter admin key:');
-            if (key === ADMIN_KEY) {
-                localStorage.setItem('adminKey', key);
-                isAdmin = true;
-                updateUIForAdmin();
-                showMessage('Admin access granted!', 'success');
-            } else if (key) {
-                showMessage('Invalid admin key', 'error');
-            }
-        }
-
-        // Add admin logout
-        function adminLogout() {
-            localStorage.removeItem('adminKey');
-            isAdmin = false;
-            updateUIForAdmin();
-            showMessage('Logged out', 'success');
-        }
-
-        // Convert image to base64
-        function convertToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
             });
-        }
+        }, observerOptions);
 
-        // Handle image selection
-        async function handleImageSelect(files) {
-            console.log('Files selected:', files.length);
-            for (let file of files) {
-                console.log('Processing file:', file.name, 'Type:', file.type, 'Size:', file.size);
-                
-                if (file.type.startsWith('image/') || file.name.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/i)) {
-                    try {
-                        // Check file size (limit to 10MB)
-                        if (file.size > 10 * 1024 * 1024) {
-                            showMessage(`Image "${file.name}" is too large. Please use images under 10MB.`, 'error');
-                            continue;
-                        }
-
-                        showMessage('Processing image...', 'success');
-                        const base64 = await convertToBase64(file);
-                        console.log('Base64 conversion successful');
-                        
-                        selectedImages.push({
-                            name: file.name,
-                            data: base64,
-                            size: file.size
-                        });
-                        updateImagePreview();
-                        showMessage(`Image "${file.name}" added successfully!`, 'success');
-                    } catch (error) {
-                        console.error('Error processing image:', error);
-                        showMessage(`Error processing image "${file.name}": ${error.message}`, 'error');
-                    }
-                } else {
-                    console.log('File type not supported:', file.type);
-                    showMessage(`"${file.name}" is not a supported image format.`, 'error');
-                }
-            }
-        }
-
-        // Update image preview
-        function updateImagePreview() {
-            imagePreview.innerHTML = selectedImages.map((img, index) => `
-                <div class="preview-item">
-                    <img src="${img.data}" alt="${img.name}" class="preview-image">
-                    <button class="remove-image" onclick="removeImage(${index})">×</button>
-                </div>
-            `).join('');
-        }
-
-        // Remove image from selection
-        function removeImage(index) {
-            selectedImages.splice(index, 1);
-            updateImagePreview();
-        }
-
-        // Show image in modal
-        function showImageModal(src) {
-            modalImage.src = src;
-            imageModal.style.display = 'block';
-        }
-
-        // Show message to user
-        function showMessage(text, type = 'success') {
-            messageDiv.innerHTML = `<div class="${type}">${text}</div>`;
-            setTimeout(() => {
-                messageDiv.innerHTML = '';
-            }, 3000);
-        }
-
-        // Load posts from Firebase
-        async function loadPosts() {
-            try {
-                const q = query(collection(db, 'posts'), orderBy('timestamp', 'desc'));
-                const querySnapshot = await getDocs(q);
-                
-                posts = [];
-                querySnapshot.forEach((doc) => {
-                    posts.push({
-                        id: doc.id,
-                        ...doc.data()
-                    });
-                });
-
-                renderPosts();
-                updatePostCount();
-            } catch (error) {
-                console.error('Error loading posts:', error);
-                postsContainer.innerHTML = '<div class="error">Error loading posts. Please try again later.</div>';
-            }
-        }
-
-        // Add new post
-        async function addPost() {
-            if (!isAdmin) {
-                showMessage('Admin access required', 'error');
-                showAdminLogin();
-                return;
-            }
-
-            const title = postTitle.value.trim();
-            const content = postContent.value.trim();
-
-            if (!title || !content) {
-                showMessage('Please fill in all fields', 'error');
-                return;
-            }
-
-            const post = {
-                title: title,
-                content: content,
-                images: selectedImages,
-                date: new Date().toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                timestamp: new Date()
-            };
-
-            try {
-                // Add to Firebase
-                showMessage('Publishing post...', 'success');
-                const docRef = await addDoc(collection(db, 'posts'), post);
-                
-                showMessage('Post published successfully!', 'success');
-                
-                // Clear form and reload posts
-                postTitle.value = '';
-                postContent.value = '';
-                selectedImages = [];
-                updateImagePreview();
-                loadPosts();
-                
-            } catch (error) {
-                console.error('Error adding post:', error);
-                showMessage('Error publishing post. Please try again.', 'error');
-            }
-        }
-
-        // Delete post
-        async function deletePost(postId) {
-            if (!isAdmin) {
-                showMessage('Admin access required', 'error');
-                return;
-            }
-            
-            if (confirm('Are you sure you want to delete this post?')) {
-                try {
-                    await deleteDoc(doc(db, 'posts', postId));
-                    showMessage('Post deleted successfully!', 'success');
-                    loadPosts();
-                } catch (error) {
-                    console.error('Error deleting post:', error);
-                    showMessage('Error deleting post. Please try again.', 'error');
-                }
-            }
-        }
-
-        // Render posts
-        function renderPosts() {
-            if (posts.length === 0) {
-                postsContainer.innerHTML = '<div class="loading">No posts yet. Write your first post above!</div>';
-                return;
-            }
-
-            postsContainer.innerHTML = posts.map(post => `
-                <article class="post">
-                    <div class="post-header">
-                        <h2 class="post-title">${escapeHtml(post.title)}</h2>
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <span class="post-date">${post.date}</span>
-                            <button class="delete-btn" onclick="deletePost('${post.id}')" style="display: ${isAdmin ? 'inline-block' : 'none'}">Delete</button>
-                        </div>
-                    </div>
-                    <div class="post-content">${escapeHtml(post.content)}</div>
-                    ${post.images && post.images.length > 0 ? `
-                        <div class="post-images">
-                            ${post.images.map(img => `
-                                <img src="${img.data}" 
-                                     alt="${img.name}" 
-                                     class="post-image small" 
-                                     onclick="showImageModal('${img.data}')">
-                            `).join('')}
-                        </div>
-                    ` : ''}
-                </article>
-            `).join('');
-            
-            // Update delete button visibility after rendering
-            updateUIForAdmin();
-        }
-
-        // Update post count
-        function updatePostCount() {
-            postCount.textContent = posts.length;
-        }
-
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Make functions global for onclick handlers
-        window.deletePost = deletePost;
-        window.removeImage = removeImage;
-        window.showImageModal = showImageModal;
-        window.showAdminLogin = showAdminLogin;
-        window.adminLogout = adminLogout;
-
-        // Event listeners
-        postForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            addPost();
+        // Observe sections for animation
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'all 0.6s ease';
+            observer.observe(section);
         });
-
-        // Image upload event listeners
-        imageUpload.addEventListener('click', () => imageInput.click());
-        
-        imageInput.addEventListener('change', (e) => {
-            handleImageSelect(e.target.files);
-        });
-
-        // Drag and drop functionality
-        imageUpload.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            imageUpload.classList.add('dragover');
-        });
-
-        imageUpload.addEventListener('dragleave', () => {
-            imageUpload.classList.remove('dragover');
-        });
-
-        imageUpload.addEventListener('drop', (e) => {
-            e.preventDefault();
-            imageUpload.classList.remove('dragover');
-            handleImageSelect(e.dataTransfer.files);
-        });
-
-        // Modal close functionality
-        imageModal.addEventListener('click', () => {
-            imageModal.style.display = 'none';
-        });
-
-        // Initialize app
-        loadPosts();
-        checkAdminStatus();
     </script>
 </body>
 </html>
